@@ -1,0 +1,317 @@
+﻿<!-- Объявление окна с определением пространств имен -->
+    <Window
+
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av" x:Class="ChatBot.ChatBotik"
+        Title="MainWindow" Height="490" Width="737">
+    <!-- Ресурсы окна -->
+    <Window.Resources>
+        <!-- Кисти для рисования различных состояний границ  на кнопке  -->
+        
+        
+        <!--x:Key - это атрибут, используемый в разметке XAML (Extensible Application Markup Language) для присваивания ключевого значения элементу или ресурсу. Он используется для обозначения уникального ключа, который позволяет обращаться к этому элементу или ресурсу из других частей вашего приложения.-->
+        <!-- Запись цвета #FFABAdB3 представляет собой шестнадцатеричное представление цвета в формате ARGB (Alpha, Red, Green, Blue).   -->
+        
+        
+        <!-- Color - для определения цвета -->
+        <SolidColorBrush x:Key="TextBox.Static.Border" Color="#FFABAdB3"/>
+        <!--Цвет при наведении мыши MouseOver -->
+        <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="#FF7EB4EA"/>
+        <!-- Цвет границ кнопки -->
+        <SolidColorBrush x:Key="TextBox.Focus.Border" Color="#FF569DE5"/>
+
+        <!-- Стиль для элемента управления TextBox -->
+
+        <!-- TargetType это свойство, используемое в XAML для указания типа элемента, к которому применяется стиль или шаблон. -->
+        <Style x:Key="TextBox" TargetType="{x:Type TextBox}">
+            <!-- Определение Property- свойств внешнего вида TextBox -->
+
+            <!-- Устанавливает цвет фона элемента управления -->
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+            <!-- Устанавливает цвет границы элемента управления, используя статический ресурс -->
+            <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
+            <!-- Устанавливает цвет переднего плана элемента управления -->
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <!-- Устанавливает толщину границы элемента управления -->
+            <Setter Property="BorderThickness" Value="1"/>
+            <!-- Устанавливает горизонтальное выравнивание содержимого по левому краю -->
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+
+
+
+
+
+            <!-- Шаблон элемента управления TextBox используется для установки шаблона (template)  -->
+            <Setter Property="Template">
+                <!-- значения -->
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <!-- Граница для элемента управления TextBox CornerRadius- угол элемента Background-задний фон  BorderBrush - цвет границы элемента SnapsToDevicePixels - Он указывает, что границы и содержимое элемента управления должны быть выровнены с устройством пикселей экрана, чтобы избежать размытости и обеспечить более четкий внешний вид-->
+                        <Border x:Name="border" CornerRadius="5" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                           
+                           <!-- Область содержимого TextBox, включая возможность прокрутки HorizontalScrollBarVisibility/SnapsToDevicePixels прокрутка жлемента со спрятаной штукой -->
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" />
+                        </Border>
+                        <!-- Триггеры для изменения внешнего вида в зависимости от состояния TextBox -->
+                        <ControlTemplate.Triggers>
+                            <!-- Триггер для неактивного состояния -->
+                            <Trigger Property="IsEnabled" Value="false">
+                                <!--означает, что свойство Opacity элемента с именем "border" будет установлено на значение 0.56-->
+                                <Setter Property="Opacity" TargetName="border" Value="0.56"/>
+                            </Trigger>
+                            <!-- Триггер для наведения мыши -->
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.MouseOver.Border}"/>
+                            </Trigger>
+                            <!-- Триггер для фокуса клавиатуры  TargetName - имя элемента -->
+                            <Trigger Property="IsKeyboardFocused" Value="true">
+                               <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.Focus.Border}"/>
+                            
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <!-- Триггеры для изменения стиля в зависимости от выделения текста -->
+            <Style.Triggers>
+                <!--этот триггер предназначен для изменения внешнего вида выделения элемента в ситуации, когда выделение является неактивным (IsInactiveSelectionHighlightEnabled=true) и не является текущим выделением (IsSelectionActive=false)-->
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true"/>
+                        <Condition Property="IsSelectionActive" Value="false"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+                </MultiTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        
+        
+        <Style x:Key="ButtonSt" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" CornerRadius="5" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="TextBox.Static.Border1" Color="#FFABAdB3"/>
+        <SolidColorBrush x:Key="TextBox.MouseOver.Border1" Color="#FF7EB4EA"/>
+        <SolidColorBrush x:Key="TextBox.Focus.Border1" Color="#FF569DE5"/>
+        <Style x:Key="TextBoxStyle1" TargetType="{x:Type TextBox}">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border1}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="AllowDrop" Value="true"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border x:Name="border" CornerRadius="5" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" TargetName="border" Value="0.56"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.MouseOver.Border1}"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.Focus.Border1}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true"/>
+                        <Condition Property="IsSelectionActive" Value="false"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+                </MultiTrigger>
+            </Style.Triggers>
+        </Style>
+        
+    </Window.Resources>
+    <!-- Создание сетки с отрицательным значением отступа внизу -->
+    <Grid Margin="0,0,0,-6">
+        <!-- Определение строк сетки -->
+        <Grid.RowDefinitions>
+            <!-- Определение высоты первой строки как 177/total* -->
+            <!--  total - сумма всех указанных значений высоты строк -->
+            <RowDefinition Height="177*"/>
+            <!-- Определение высоты второй строки как 28/total* -->
+            <RowDefinition Height="28*"/>
+            <!-- Определение высоты третьей строки как 221/total* -->
+            <RowDefinition Height="221*"/>
+            <!-- Определение высоты четвертой строки как 35/total* -->
+            <RowDefinition Height="35*"/>
+        </Grid.RowDefinitions>
+        <!-- Определение столбцов сетки -->
+        <Grid.ColumnDefinitions>
+            <!-- Определение ширины первого столбца как 331/total* -->
+            <ColumnDefinition Width="331*"/>
+            <!-- Определение ширины второго столбца как 211/total* -->
+            <ColumnDefinition Width="211*"/>
+            <!-- Определение ширины третьего столбца как 127/total* -->
+            <ColumnDefinition Width="127*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- устанавливаем фоновое изображение картинка из папки  ImageSource- путь -->
+        <Grid.Background>
+            <ImageBrush ImageSource="/pi.pmg.jpg"/>
+        </Grid.Background>
+        
+        <TextBox Style="{DynamicResource TextBox}" x:Name="text_mess" HorizontalAlignment="Right" Margin="0,197,48,18" TextWrapping="Wrap" Text="" Width="517" Grid.ColumnSpan="2" Grid.Row="2" Grid.RowSpan="2"/>
+        <Button Style="{DynamicResource ButtonSt}" x:Name="butSend" Content="send" Margin="200,198,29,18" FontSize="10" FontFamily="Britannic Bold" Click="butSend_Click" Background="#FFEADCEE" IsDefault = "true" FontStyle="Italic"  Grid.Column="1" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
+
+
+        <!-- Элемент TextBox -->
+        <!--<TextBox 
+    Style="{DynamicResource TextBox}" --><!-- Применение стиля для TextBox из ресурсов --><!--
+            x:Name="text_mess"
+            --><!-- Имя элемента, которое можно использовать для обращения к нему в коде --><!--
+            HorizontalAlignment="Right"
+            --><!-- Горизонтальное выравнивание элемента по правому краю --><!--
+            Margin="0,197,48,18"
+            --><!-- Отступы элемента от краев контейнера: сверху, слева, снизу, справа --><!--
+            TextWrapping="Wrap"
+            --><!-- Обертывание текста в элементе, если он выходит за границы --><!--
+            Text=""
+            --><!-- Текст, отображаемый в элементе TextBox --><!--
+            Width="517"
+            --><!-- Ширина элемента --><!--
+            Grid.ColumnSpan="2"
+            --><!-- Расположение элемента в сетке: количество занимаемых столбцов --><!--
+            Grid.Row="2"
+            --><!-- Расположение элемента в сетке: номер строки --><!--
+            Grid.RowSpan="2"
+            --><!-- Расположение элемента в сетке: количество занимаемых строк --><!--
+            />-->
+
+            <!-- Элемент Button --><!--
+            <Button 
+    Style="{DynamicResource ButtonSt}" --><!-- Применение стиля для Button из ресурсов --><!--
+                x:Name="butSend"
+                --><!-- Имя элемента, которое можно использовать для обращения к нему в коде --><!--
+                Content="send"
+                --><!-- Текст, отображаемый на кнопке --><!--
+                Margin="200,198,29,18"
+                --><!-- Отступы элемента от краев контейнера: сверху, слева, снизу, справа --><!--
+                FontSize="10"
+                --><!-- Размер шрифта --><!--
+                FontFamily="Britannic Bold"
+                --><!-- Шрифт текста --><!--
+                Click="butSend_Click"
+                --><!-- Обработчик события клика на кнопку --><!--
+                Background="#FFEADCEE"
+                --><!-- Фон кнопки --><!--
+                IsDefault="true"
+                --><!-- Указание кнопки как "основной", для обработки нажатия клавиши Enter --><!--
+                FontStyle="Italic"
+                --><!-- Наклон шрифта --><!--
+                Grid.Column="1"
+                --><!-- Расположение элемента в сетке: номер столбца --><!--
+                Grid.Row="2"
+                --><!-- Расположение элемента в сетке: номер строки --><!--
+                Grid.RowSpan="2"
+                --><!-- Расположение элемента в сетке: количество занимаемых строк --><!--
+                Grid.ColumnSpan="2"
+                --><!-- Расположение элемента в сетке: количество занимаемых столбцов --><!--
+                />-->
+
+        <!--создаем лист вью для отображения сообщенийм ItemsSource   Margin- для расположения -->
+        <ListView x:Name="messageList" Margin="24,16,29,44"  ItemsSource="{Binding Messages}" Grid.ColumnSpan="3"  Grid.RowSpan="3" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+            <ListView.Background>
+                <!-- устанавливаем картинку для фона  -->
+                    <ImageBrush ImageSource="/pi.pmg.jpg" Stretch="Fill" TileMode="FlipX"/>
+            </ListView.Background>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <!-- устанавливаем для отображаемы сооющений CornerRadius радиус  горизонтальное отображение HorizontalAlignment-->
+                        <Border Margin="5" Background="White" Padding="5"  CornerRadius="10" HorizontalAlignment="Right">
+                        <StackPanel>
+                            <!-- устанавливаем размер шрифта FontSize стиль шрифта FontFamily цвет Foreground -->
+                            <TextBlock Text="{Binding Author}" FontSize="10" FontFamily="Bahnschrift Light" Foreground="#FF370F3A" />
+                            <TextBlock Text="{Binding Text}" TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding Timestamp}" HorizontalAlignment="Right" FontSize="10" Foreground="Gray" />
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemContainerStyle>
+                <!-- устанавливаем значение для отображения елемента в listView-->
+                <Style TargetType="ListViewItem">
+                    <Style.Triggers>
+                        <!-- устанавливаем триггер на имя автора Value если это имя бота то отображаем справа  -->
+                            <DataTrigger Binding="{Binding Author}" Value="ЧатикБотик">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
+
+
+
+
+
+    </Grid>
+</Window>
